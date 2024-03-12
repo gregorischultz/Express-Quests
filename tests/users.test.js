@@ -1,5 +1,7 @@
 const request = require("supertest");
 
+const crypto = require ("node:crypto");
+
 const app = require("../src/app");
 
 const database = require ("../database");
@@ -31,3 +33,42 @@ describe("GET /api/users/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+
+describe ("POST /api/users", () => {
+  it ("should return created user", async () => {
+    const newUser = {
+      firstname: "Marie",
+      lastname: "Martin",
+      email: `${crypto.randomUUID()}@wild.co`,
+      city: "Paris",
+      language: "French",
+    };
+
+    const response = await request (app).post ("/api/users").send (newUser);
+
+    expect (response.headers ["content-type"]).toMatch (/json/);
+    expect (response.status).toEqual (201);
+
+    // Adicione mais expectativas conforme necessário para verificar os dados do usuário criado?
+  });
+  // Adicione mais testes conforme necessário, por exemplo, para verificar entradas inválidas?
+});
+
+
+// describe ("POST /api/users", () => {
+//   it ("should return an error for duplicate email", async () => {
+//     const duplicateUser = {
+//       firstname: "John",
+//       lastname: "Doe",
+//       email: "john.doe@example.com", // e-mail que já existe.
+//       city: "New York",
+//       language: "English",
+//     };
+
+//     const response = await request(app).post ("/api/users").send (duplicateUser);
+
+//     expect (response.status).toEqual (400);
+//     expect (response.body).toHaveProperty ("error");
+//   })
+// })

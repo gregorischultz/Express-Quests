@@ -30,7 +30,7 @@ database
 });
 
 database
-.query ("select * from movies")
+.query ("select * from users")
 .then ((result) => {
     const movies = result[0];
 
